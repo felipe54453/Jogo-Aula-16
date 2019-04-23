@@ -20,6 +20,32 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
+#Classe Jogador que representa a nave 
+class Player(pygame.sprite.Sprite): 
+    
+    #Construtor da classe
+    def __init__(self):
+        
+        #Construtor da classe pai (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+        
+        #Carregando a imgagem de fundo.
+        player_img = pygame.image.load(path.join(img_dir,"playerShip1_orange.png"))
+        self.image = player_img
+        
+        #diminuindo o tamanho da imagem
+        self.image = pygame.transform.scale(player_img, (50, 38))
+        
+        #deixando transparente.
+        self.image.set_colorkey(BLACK)
+        
+        #detalhes sobre o posicionamento
+        self.rect = self.image.get_rect()
+        
+        #centraliza embaixo da tela
+        self.rect.centerx = WIDTH / 2
+        self.rect.bottom = HEIGHT - 10
+        
 # Inicialização do Pygame.
 pygame.init()
 pygame.mixer.init()
@@ -36,6 +62,13 @@ clock = pygame.time.Clock()
 # Carrega o fundo do jogo
 background = pygame.image.load(path.join(img_dir, 'starfield.png')).convert()
 background_rect = background.get_rect()
+
+# cria uma nave . O construtor sera chamado automaticamente
+player = Player()
+
+#cria um grupo de sprites e adiciona a nave
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
 
 # Comando para evitar travamentos.
 try:
@@ -57,6 +90,7 @@ try:
         # A cada loop, redesenha o fundo e os sprites
         screen.fill(BLACK)
         screen.blit(background, background_rect)
+        all_sprites.draw(screen)
         
         # Depois de desenhar tudo, inverte o display.
         pygame.display.flip()
